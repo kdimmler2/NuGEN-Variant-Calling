@@ -1,0 +1,7 @@
+paired_fastqs: /scratch.global/dimml002/NuGEN_FASTQs/FASTQs/
+single_fastqs: /home/mccuem/data_release/umgc/nextseq/180108_NB551164_0013_AHLGWKBGX3/McCue_Project_033/
+ref: /panfs/jay/groups/27/mccuem/shared/Data/FASTAs/EquCab3/EquCab3_nucl.fasta
+target_file: /panfs/jay/groups/27/mccuem/dimml002/NuGEN/targets/target_bed_files/target_regions_Liftover.bed
+known_sites: /panfs/jay/groups/27/mccuem/dimml002/NuGEN/SNP_Sets/snp_array/MNEc2M.EquCab3.09182018.recode.rmGT.refseqnames.chrIDmod.vcf.gz
+dbsnp: /panfs/jay/groups/27/mccuem/dimml002/NuGEN/SNP_Sets/dbSNP/equus_caballus.chrIDmod.vcf.gz
+qualimap_regions: /panfs/jay/groups/27/mccuem/dimml002/NuGEN/targets/target_bed_files/qualimap_regions.bed

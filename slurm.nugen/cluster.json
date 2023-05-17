@@ -1,0 +1,137 @@
+{
+"single_fastqc" :
+{
+"output" : ".logs/{rule}/{wildcards.se_fastq}/%j.{rule}.out",
+"error"  : ".logs/{rule}/{wildcards.se_fastq}/%j.{rule}.err"
+},
+"paired_fastqc" :
+{
+"output" : ".logs/{rule}/{wildcards.pe_fastq}/%j.{rule}.out",
+"error"  : ".logs/{rule}/{wildcards.pe_fastq}/%j.{rule}.err"
+},
+"fastq_to_sam" :
+{
+"output" : ".logs/{rule}/{wildcards.sample}/%j.{rule}.out",
+"error"  : ".logs/{rule}/{wildcards.sample}/%j.{rule}.err"
+},
+"mark_adapters" :
+{
+"output" : ".logs/{rule}/{wildcards.sample}/%j.{rule}.out",
+"error"  : ".logs/{rule}/{wildcards.sample}/%j.{rule}.err"
+},
+"align" :
+{
+"output" : ".logs/{rule}/{wildcards.sample}/%j.{rule}.out",
+"error"  : ".logs/{rule}/{wildcards.sample}/%j.{rule}.err"
+},
+"mark_duplicates" :
+{
+"output" : ".logs/{rule}/{wildcards.sample}/%j.{rule}.out",
+"error"  : ".logs/{rule}/{wildcards.sample}/%j.{rule}.err"
+},
+"bqsr" :
+{
+"output" : ".logs/{rule}/{wildcards.sample}/%j.{rule}.out",
+"error"  : ".logs/{rule}/{wildcards.sample}/%j.{rule}.err"
+},
+"apply_bqsr" :
+{
+"output" : ".logs/{rule}/{wildcards.sample}/%j.{rule}.out",
+"error"  : ".logs/{rule}/{wildcards.sample}/%j.{rule}.err"
+},
+"qualimap" :
+{
+"output" : ".logs/{rule}/{wildcards.sample}/%j.{rule}.out",
+"error"  : ".logs/{rule}/{wildcards.sample}/%j.{rule}.err"
+},
+"hap_calling" :
+{
+"output" : ".logs/{rule}/{wildcards.sample}/%j.{rule}.out",
+"error"  : ".logs/{rule}/{wildcards.sample}/%j.{rule}.err"
+},
+"subset_targets_gvcfs" :
+{
+"output" : ".logs/{rule}/{wildcards.sample}/%j.{rule}.out",
+"error"  : ".logs/{rule}/{wildcards.sample}/%j.{rule}.err"
+},
+"zip_and_index_gvcfs" :
+{
+"output" : ".logs/{rule}/{wildcards.sample}/%j.{rule}.out",
+"error"  : ".logs/{rule}/{wildcards.sample}/%j.{rule}.err"
+},
+"gvcf_list" :
+{
+"output" : ".logs/{rule}/%j.{rule}.out",
+"error"  : ".logs/{rule}/%j.{rule}.err"
+},
+"genomics_db_import" :
+{
+"output" : ".logs/{rule}/{wildcards.interval}/%j.{rule}.out",
+"error"  : ".logs/{rule}/{wildcards.interval}/%j.{rule}.err"
+},
+"genotype_gvcfs" :
+{
+"output" : ".logs/{rule}/{wildcards.interval}/%j.{rule}.out",
+"error"  : ".logs/{rule}/{wildcards.interval}/%j.{rule}.err"
+},
+"vcf_list" :
+{
+"output" : ".logs/{rule}/%j.{rule}.out",
+"error"  : ".logs/{rule}/%j.{rule}.err"
+},
+"gather_vcfs" :
+{
+"output" : ".logs/{rule}/%j.{rule}.out",
+"error"  : ".logs/{rule}/%j.{rule}.err"
+},
+"select_snps" :
+{
+"output" : ".logs/{rule}/%j.{rule}.out",
+"error"  : ".logs/{rule}/%j.{rule}.err"
+},
+"select_indels" :
+{
+"output" : ".logs/{rule}/%j.{rule}.out",
+"error"  : ".logs/{rule}/%j.{rule}.err"
+},
+"hard_filter" :
+{
+"output" : ".logs/{rule}/%j.{rule}.out",
+"error"  : ".logs/{rule}/%j.{rule}.err",
+},
+"annotate_indels" :
+{
+"output" : ".logs/{rule}/%j.{rule}.out",
+"error"  : ".logs/{rule}/%j.{rule}.err",
+},
+"excess_het" :
+{
+"output" : ".logs/{rule}/%j.{rule}.out",
+"error"  : ".logs/{rule}/%j.{rule}.err",
+},
+"sites_only" :
+{
+"output" : ".logs/{rule}/%j.{rule}.out",
+"error"  : ".logs/{rule}/%j.{rule}.err",
+},
+"variant_recalibrator" :
+{
+"output" : ".logs/{rule}/%j.{rule}.out",
+"error"  : ".logs/{rule}/%j.{rule}.err"
+},
+"apply_vqsr" :
+{
+"output" : ".logs/{rule}/%j.{rule}.out",
+"error"  : ".logs/{rule}/%j.{rule}.err",
+},
+"annotate_snps" :
+{
+"output" : ".logs/{rule}/%j.{rule}.out",
+"error"  : ".logs/{rule}/%j.{rule}.err",
+},
+"zip_and_index_vcfs" :
+{
+"output" : ".logs/{rule}/%j.{rule}.out",
+"error"  : ".logs/{rule}/%j.{rule}.err",
+},
+}
