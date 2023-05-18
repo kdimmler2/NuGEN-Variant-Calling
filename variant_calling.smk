@@ -77,8 +77,6 @@ rule fastq_to_sam:
         unpack(get_fastqs),
     output:
         ubam = 'Data_Preprocessing/uBAMs/{sample}/{sample}.fastqtosam.bam',
-    params:
-        jar = config[Picard_jar],
     resources:
         time    = 120,
         mem_mb  = 60000,
@@ -98,7 +96,7 @@ rule fastq_to_sam:
 
         if layouts[wildcards.sample] == 'single':
             shell(f'''
-                java -jar {params.jar} FastqToSam \
+                java -jar src/picard.jar FastqToSam \
                     --FASTQ {{input.r1}} \
                     --OUTPUT {{output.ubam}} \
                     --READ_GROUP_NAME {d2['read_group']}\
@@ -109,7 +107,7 @@ rule fastq_to_sam:
                     ''')
         elif layouts[wildcards.sample] == 'paired':
             shell(f'''
-                java -jar {params.jar} FastqToSam \
+                java -jar src/picard.jar FastqToSam \
                     --FASTQ {input.r1} \
                     --FASTQ2 {input.r2} \
                     --OUTPUT {{output.ubam}} \
@@ -126,15 +124,13 @@ rule mark_adapters:
     output:
         marked = 'Data_Preprocessing/Marked_uBAMs/{sample}/{sample}.markilluminaadapters.bam',
         metrics = 'Data_Preprocessing/Marked_uBAMs/{sample}/{sample}.txt/',
-    params:
-        jar = config[Picard_jar],
     resources:
         time    = 120,
         mem_mb    = 60000,
         cpus    = 4,
     shell:
         '''
-            java -jar {params.jar} MarkIlluminaAdapters \
+            java -jar src/picard.jar MarkIlluminaAdapters \
             I={input.ubam} \
             M={output.metrics} \
             O={output.marked}
@@ -147,7 +143,6 @@ rule align:
         bam = 'Data_Preprocessing/BAMs/{sample}/{sample}.aligned.bam',
     params:
         ref = config[ref],
-        jar = config[Picard_jar]
     threads: 16
     resources:
         time    = 1440,
@@ -155,14 +150,14 @@ rule align:
         cpus    = 4,
     shell:
         '''
-            java -Xmx8G -jar {params.jar} SamToFastq \
+            java -Xmx8G -jar src/picard.jar SamToFastq \
             I={input.ubam} \
             FASTQ=/dev/stdout \
             CLIPPING_ATTRIBUTE=XT CLIPPING_ACTION=2 INTERLEAVE=true NON_PF=true | \
  
             bwa mem -M -t 7 -p {params.ref} /dev/stdin | \
 
-            java -Xmx16G -jar {params.jar} MergeBamAlignment \
+            java -Xmx16G -jar src/picard.jar MergeBamAlignment \
             ALIGNED_BAM=/dev/stdin \
             UNMAPPED_BAM={input.ubam} \
             OUTPUT={output.bam} \
@@ -523,7 +518,6 @@ rule annotate_indels:
         stats = 'Variant_Calling/SnpEff/indels.snpeff.html',
         genes = 'Variant_Calling/SnpEff/indels.snpeff.genes.txt',
     params:
-        jar = config[SnpEff_jar],
         config = config[SnpEff_config],
     threads: 4
     resources:
@@ -533,7 +527,7 @@ rule annotate_indels:
     shell:
         '''
             java -Xmx4g -Djava.io.tmpdir=/home/mccuem/shared/Projects/HorseGenomeProject/Data/temp_files \
-                -jar {params.jar} \
+                -jar src/snpEff/snpEff.jar \
                 -C {params.config} \
                 -csvstats {output.csv} \
                 -stats {output.stats} \
@@ -642,7 +636,6 @@ rule annotate_snps:
         stats = 'Variant_Calling/SnpEff/snps.snpeff.html',
         genes = 'Variant_Calling/SnpEff/snps.snpeff.genes.txt',
     params:
-        jar = config[SnpEff_jar],
         config = config[SnpEff_config],
     threads: 4
     resources:
@@ -652,7 +645,7 @@ rule annotate_snps:
     shell:
         '''
             java -Xmx4g -Djava.io.tmpdir=/home/mccuem/shared/Projects/HorseGenomeProject/Data/temp_files \
-                -jar {params.jar} \
+                -jar src/snpEff/snpEff.jar \
                 -C {params.config} \
                 -csvstats {output.csv} \
                 -stats {output.stats} \
@@ -666,8 +659,6 @@ rule combine_vcfs:
         snps = {rules.apply_vqsr.output.recal_vcf},
     output:
         combined_vcf = 'Variant_Calling/GatherVcfsCloud/Final/output.vcf',
-    params:
-        jar = config[Picard_jar]
     threads: 4
     resources:
         time    = 600,
@@ -675,7 +666,7 @@ rule combine_vcfs:
         cpus    = 4,
     shell:
         '''
-            java -jar {params.jar} MergeVcfs \
+            java -jar src/picard.jar MergeVcfs \
                 I= {input.indels} \
                 I= {input.snps} \
                 O= {output.combined_vcf}
