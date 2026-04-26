@@ -65,26 +65,13 @@ Paired-end samples are identified from R2 FASTQ files so that each sample/lane i
 
 ## Main workflow stages
 
-1. **Input discovery**  
-   FASTQ files are scanned and sample layout information is stored for downstream rules.
-
-2. **uBAM creation and adapter marking**  
-   FASTQ files are converted to unmapped BAM format and adapters are marked.
-
-3. **Alignment and BAM processing**  
-   Reads are aligned to the reference genome, sorted, merged, and prepared for variant calling.
-
-4. **Base quality score recalibration**  
-   BQSR is performed using known variant sites.
-
-5. **GVCF generation**  
-   Per-sample GVCFs are generated with GATK HaplotypeCaller.
-
-6. **Joint genotyping and filtering**  
-   GVCFs are combined for cohort-level genotyping, followed by variant filtering.
-
-7. **Annotation and QC**  
-   Filtered variants are annotated with SnpEff, and QC outputs are generated throughout the workflow.
+- **Input discovery:** FASTQ files are scanned and sample layout information is stored for downstream rules.
+- **uBAM creation and adapter marking:** FASTQ files are converted to unmapped BAM format and adapters are marked.
+- **Alignment and BAM processing:** Reads are aligned to the reference genome, sorted, merged, and prepared for variant calling.
+- **Base quality score recalibration:** BQSR is performed using known variant sites.
+- **GVCF generation:** Per-sample GVCFs are generated with GATK HaplotypeCaller.
+- **Joint genotyping and filtering:** GVCFs are combined for cohort-level genotyping, followed by variant filtering.
+- **Annotation and QC:** Filtered variants are annotated with SnpEff, and QC outputs are generated throughout the workflow.
 
 ## Software requirements
 
@@ -104,7 +91,7 @@ A formal Conda environment file has not yet been added to this prototype reposit
 Example command:
 
 ```bash
-snakemake -s nugen_pipeline.smk \
+snakemake -s variant_calling.smk \
     --profile slurm.nugen \
     --keep-going \
     --rerun-incomplete \
@@ -125,6 +112,6 @@ Future improvements would include:
 - adding a small test dataset
 - documenting expected file naming conventions more fully
 - adapting the workflow for targeted sequencing-specific processing
-- Adding additional QC steps, such as fastqc
-- Adding the ability to do variant filtration through VQSR or hard filtering
-- Adding intervals for faster parallel processing of sequence data
+- adding additional QC steps, such as fastqc
+- adding the ability to do variant filtration through VQSR or hard filtering
+- adding intervals for faster parallel processing of sequence data
