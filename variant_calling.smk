@@ -7,13 +7,17 @@ localrules: gvcf_list,
 #Create a dictionary to identify FASTQs that are paired-end and single-end
 layouts = {}
 
+# Identify paired-end FASTQ files.
+# Only R2 files are used here so each paired-end sample/lane is added once.
 for root, dirs, files in os.walk(config['paired_fastqs']):
     for file in files:
         if file.endswith('.fastq.gz') and 'R2' in file:
             Mnum, sample, lane, read, end = file.split('_')
-            #Mnum, read, lane = file.split('_')
             test_list.append(f'{Mnum}')
             layouts[f'{Mnum}_{sample}_{lane}'] = 'paired'
+
+# Identify single-end FASTQ files.
+# Duplicate files are skipped, and each remaining sample is labeled as single-end.
 for root, dirs, files in os.walk(config['single_fastqs']):
     for file in files:
         if file.endswith('.fastq.gz'):
@@ -28,6 +32,10 @@ include: 'src/utils.py'
 PE_FASTQS,READ, = glob_wildcards(os.path.join('paired_fastqs','{pe_fastq}_{read}_001.fastq.gz'))
 SE_FASTQS, = glob_wildcards(os.path.join('single_fastqs','{se_fastq}.fastq.gz'))
 
+# Target outputs for the full workflow.
+# Some intermediate outputs are included intentionally because the workflow
+# branches across QC, per-sample processing, joint genotyping, filtering,
+# and annotation steps.
 rule all:
     input:
         expand('Data_Preprocessing/uBAMs/{sample}/{sample}.fastqtosam.bam', sample = layouts.keys()),
@@ -94,6 +102,8 @@ rule fastq_to_sam:
         d2['plat_unit'] = f'{tmp[2]}.{tmp[3]}.{tmp[9]}'
         d2['library'] = f'Illumina.{wildcards.sample}'
 
+        # the layouts dictionary was created at the top of this script
+        # to identify single-end and paired-end samples for appropriate processing here
         if layouts[wildcards.sample] == 'single':
             shell(f'''
                 java -jar src/picard.jar FastqToSam \
@@ -359,6 +369,7 @@ rule zip_and_index_gvcfs:
             gatk IndexFeatureFile -I {output.zipped}
         '''
 
+# Create a list of GVCF paths for GenomicsDBImport.
 rule gvcf_list:
     input:
     #    gvcfs = expand('Variant_Calling/HaplotypeCaller/{sample}/{sample}.g.vcf.gz', sample = layouts.keys()),
@@ -419,6 +430,7 @@ rule genotype_gvcfs:
                 -L {input.interval}
         '''
 
+# Create a list of per-interval VCFs for GatherVcfsCloud.
 rule vcf_list:
     input:
         vcfs = expand('Variant_Calling/GenotypeGVCFs/equine_{interval}/output.vcf.gz', interval=[str(i).zfill(3) for i in range(0,228+1)]),
