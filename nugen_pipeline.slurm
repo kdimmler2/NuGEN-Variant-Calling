@@ -17,7 +17,7 @@ cd $SLURM_SUBMIT_DIR
 
 conda activate nugen
 
-snakemake -s nugen_pipeline.smk \
+snakemake -s variant_calling.smk \
     --profile slurm.nugen \
     --keep-going \
     --rerun-incomplete \
